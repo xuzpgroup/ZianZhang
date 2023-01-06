@@ -22,7 +22,7 @@ function varargout = imex(varargin)
 
 % Edit the above text to modify the response to help imex
 
-% Last Modified by GUIDE v2.5 31-Dec-2022 00:18:12
+% Last Modified by GUIDE v2.5 06-Jan-2023 11:25:54
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -53,6 +53,16 @@ function imex_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to imex (see VARARGIN)
 
 handles=initialization(handles,'init');
+
+% % temp
+% path='E:\Data\Literature Data\test dataset\';
+% file='project_overlap.mat';
+% load([path,file]);
+% handles.data.path=path;
+% handles.data.file=file;
+% handles.data=savedata;
+% handles=initialization(handles,'load');
+
 % Choose default command line output for imex
 handles.output = hObject;
 
@@ -767,6 +777,7 @@ function But_symbolRecognition_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     handles=func_symbol_recognition(handles);
+    %handles=func_symbol_recognition_single(handles);
     guidata(hObject,handles)
 
 % --- Executes on button press in But_colorRecognition.
@@ -777,6 +788,13 @@ function But_colorRecognition_Callback(hObject, eventdata, handles)
     handles=func_symbol_recognition_color(handles);
     guidata(hObject,handles)   
 
+% --- Executes on button press in But_overlapData.
+function But_overlapData_Callback(hObject, eventdata, handles)
+% hObject    handle to But_overlapData (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)    
+    handles=func_symbol_recognition(handles);
+    guidata(hObject,handles)     
 % --- Executes on button press in But_addPickedData.
 function But_addPickedData_Callback(hObject, eventdata, handles)
 % hObject    handle to But_addPickedData (see GCBO)
@@ -2579,9 +2597,9 @@ function handles=func_analyse_legend(handles)
     for i=1:nbox
         legendbox=handles.data.imLib(ci).legend.preselect.rcrng(i,:);
         try        
-            [symbol,word,color,itembox]=process_legend(legendbox,row,col,center,box,ob_wh,bw,rgb);
+            [symbol,symbol_rgb,word,color,itembox]=process_legend(legendbox,row,col,center,box,ob_wh,bw,rgb);
             % save data to imLib
-            handles=savedata_analyse_legend(handles,ci,symbol,word,color,itembox);
+            handles=savedata_analyse_legend(handles,ci,symbol,symbol_rgb,word,color,itembox);
             handles=addMsg(handles,['Done analyse_legend ',num2str(i),'/',num2str(nbox)]);
         catch ME
             handles=addMsg(handles,['ERROR when executing analyse_legend ',num2str(i),'/',num2str(nbox)]);
@@ -2629,7 +2647,7 @@ function handles=func_del_legend_box(handles)
         handles=display_data_detail(handles,'preselect');
     end
     
-function handles=func_symbol_recognition(handles)
+function handles=func_symbol_recognition_single(handles)
     ci=handles.currentImg;
     if ~handles.data.imLib(ci).sepobj.exist
         handles=addMsg(handles,'Objects are not seperated, CALL seperate_object.');
@@ -2763,6 +2781,79 @@ function handles=func_symbol_recognition_color(handles)
     handles=datastruct_initialize(handles);
     handles=detail_page_initialization(handles);    
 
+function handles=func_symbol_recognition(handles)
+    ci=handles.currentImg;
+    if isempty(handles.gray)
+        handles.gray=rgb2gray(handles.rgb);
+    end        
+    if isempty(handles.bw)
+        handles.bw=imbinarize(handles.gray,handles.setting.bw_thre);
+    end      
+    if ~handles.data.imLib(ci).sepobj.exist
+        handles=addMsg(handles,'Objects are not seperated, CALL seperate_object.');
+        handles=func_seperate_object(handles);
+    end    
+    if ~handles.data.imLib(ci).legend.exist
+        handles=addMsg(handles,'Legend not found.');
+        if handles.data.imLib(ci).legend.preselect.exist
+            handles=func_analyse_legend(handles);
+        else    
+            handles=addMsg(handles,'Legend region not found, EXIT.');
+        end    
+    end  
+    handles=imLib_data_init(handles,ci);
+    sepobj=handles.data.imLib(ci).sepobj;
+    center=sepobj.center;
+    ob_wh=sepobj.ob_wh;
+    n_cls=sepobj.n;
+    row=sepobj.row;
+    col=sepobj.col;
+    box=sepobj.box;
+    pos_xa=0;
+    pos_ya=0;
+    incbox={};
+    excbox={};
+    excid=[];
+    if handles.data.imLib(ci).axis.pos_xa.exist==1
+        pos_xa=handles.data.imLib(ci).axis.pos_xa.data;
+    end    
+    if handles.data.imLib(ci).axis.pos_ya.exist==1
+        pos_ya=handles.data.imLib(ci).axis.pos_ya.data;
+    end
+    [h,w]=size(handles.bw);
+    if ~isnan(pos_xa) && ~isnan(pos_ya) && pos_xa && pos_ya
+        incbox={[pos_ya,w,1,pos_xa]};
+    else
+        incbox={[1,w,1,h]};
+    end
+    preselect=handles.data.imLib(ci).legend.preselect;
+    if preselect.exist
+        for i=1:preselect.nbox
+            rcrng=preselect.rcrng;
+            excbox{i}=[rcrng(3),rcrng(4),rcrng(1),rcrng(2)];
+        end
+    end
+    lgd=handles.data.imLib(ci).legend;
+    symbol={};
+    symbol_bw={};
+    color={};
+    for i=1:lgd.nitem
+        symbol{i}=lgd.item(i).symbol_rgb;
+        symbol_bw{i}=lgd.item(i).symbol;
+        color{i}=lgd.item(i).color;
+    end
+    handles=addMsg(handles,'EXECUTING symbol_recognition.');    
+    try
+        data=extract_overlap_data(handles.rgb,handles.bw,symbol,symbol_bw,incbox,excbox);
+        handles=savedata_symbol_recognition_overlap(handles,data);
+        handles=addMsg(handles,'Done symbol_recognition');   
+    catch
+        handles=addMsg(handles,'ERROR symbol_recognition_color.');   
+        return;
+    end
+    handles=datastruct_initialize(handles);
+    handles=detail_page_initialization(handles);    
+    
 function handles=func_add_picked_data(handles)
     ci=handles.currentImg;
     cp=handles.currentProperty;
@@ -3301,6 +3392,28 @@ function handles=savedata_symbol_recognition_color(handles,data)
         handles.data.imLib(ci).data.series(i).runout=zeros(nrow,1);
     end
     
+function handles=savedata_symbol_recognition_overlap(handles,data)
+    ci=handles.currentImg;
+    handles.data.imLib(ci).data.exist=1;
+    handles.data.imLib(ci).data.state='auto';
+    ns=handles.data.imLib(ci).legend.nitem;
+    handles.data.imLib(ci).data.nseries=ns;
+    handles.data.imLib(ci).data.colorpick=0;
+    if ~isfield(handles.data.imLib(ci).data,'series')
+        handles.data.imLib(ci).data.series(1)=struct();
+    end
+    for i=1:ns
+        handles.data.imLib(ci).data.series(i).text=handles.data.imLib(ci).legend.item(i).text;
+    end
+    nob=numel(data);
+    count=zeros(1,handles.data.imLib(ci).data.nseries);
+    for i=1:nob
+        handles.data.imLib(ci).data.series(i).pdata=data{i};
+        nrow=size(data{i},1);
+        handles.data.imLib(ci).data.series(i).auto=zeros(nrow,1)+1;
+        handles.data.imLib(ci).data.series(i).runout=zeros(nrow,1);
+    end
+    
 function   handles=imLib_var_init(handles) 
     n=numel(handles.data.imLib);
     for i=1:n
@@ -3369,13 +3482,14 @@ function handles=imLib_data_init(handles,i)
     handles.data.imLib(i).data.state='';    
     
     
-function handles=savedata_analyse_legend(handles,ci,symbol,word,color,box)
+function handles=savedata_analyse_legend(handles,ci,symbol,symbol_rgb,word,color,box)
     ci=handles.currentImg;
     n=numel(symbol);
     handles.data.imLib(ci).legend.exist=1;
     ni=handles.data.imLib(ci).legend.nitem;
     for i=ni+1:ni+n
         handles.data.imLib(ci).legend.item(i).symbol=symbol{i-ni};
+        handles.data.imLib(ci).legend.item(i).symbol_rgb=symbol_rgb{i-ni};
         handles.data.imLib(ci).legend.item(i).text=word{i-ni};
         handles.data.imLib(ci).legend.item(i).color=color{i-ni};
         handles.data.imLib(ci).legend.item(i).box=box{i-ni};
@@ -3402,6 +3516,7 @@ function handles=savedata_add_data_series(handles)
             handles.bw=imbinarize(handles.gray,handles.setting.bw_thre);
         end   
         handles.data.imLib(ci).legend.item(n).symbol=handles.bw(bx(1):bx(2),bx(3):bx(4));
+        handles.data.imLib(ci).legend.item(n).symbol_rgb=handles.rgb(bx(1):bx(2),bx(3):bx(4),:);
         handles.data.imLib(ci).legend.item(n).text='';
         handles.data.imLib(ci).legend.item(n).color=[nan,nan,nan];
         
