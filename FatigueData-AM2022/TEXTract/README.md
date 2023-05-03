@@ -8,4 +8,4 @@ Data extraction from text involves the following steps:
 
 3. **Sentence splitting**. The ChemDataExtractor v2 ([http://chemdataextractor2.org/](http://chemdataextractor2.org/)) is used to split sentence, since it specializes in scientific text. 
 
-4. **Regular expression**. Data are extracted by regular expression (RE) design for AM fatigue, see `RE_AMfatigue/` for details.
+4. **Regular expression**. Data are extracted by regular expression (RE) designed for AM fatigue, see `RE_AMfatigue/` for details.
