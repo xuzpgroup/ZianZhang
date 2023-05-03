@@ -22,7 +22,7 @@ function varargout = imex(varargin)
 
 % Edit the above text to modify the response to help imex
 
-% Last Modified by GUIDE v2.5 06-Jan-2023 11:25:54
+% Last Modified by GUIDE v2.5 16-Feb-2023 16:03:50
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -54,15 +54,6 @@ function imex_OpeningFcn(hObject, eventdata, handles, varargin)
 
 handles=initialization(handles,'init');
 
-% % temp
-% path='E:\Data\Literature Data\test dataset\';
-% file='project_overlap.mat';
-% load([path,file]);
-% handles.data.path=path;
-% handles.data.file=file;
-% handles.data=savedata;
-% handles=initialization(handles,'load');
-
 % Choose default command line output for imex
 handles.output = hObject;
 
@@ -71,11 +62,8 @@ guidata(hObject, handles);
 
 % UIWAIT makes imex wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
-%im=imread('D:\Tsinghua\Project\Fatigue Data Framework\search data\AM fatigue\selected pic\01210.jpeg'); 
-%imhandle=imshow(im);
-%set(imhandle,'ButtonDownFcn',@ImageClickPos);
-%handles.a=1;
-%handles.b=2;
+
+
 
 % --- Outputs from this function are returned to the command line.
 function varargout = imex_OutputFcn(hObject, eventdata, handles) 
@@ -432,113 +420,27 @@ function figure1_WindowKeyPressFcn(hObject, eventdata, handles)
 %	Modifier: name(s) of the modifier key(s) (i.e., control, shift) pressed
 % handles    structure with handles and user data (see GUIDATA)
     ci=handles.currentImg;
-    if strcmp(eventdata.Key,'control')
-        handles=func_key_onoff(handles);
-    end
     if handles.keyon
         %if strcmp(eventdata.Key,'control')
         %    handles.selection.continuous=~handles.selection.continuous;
         if strcmp(eventdata.Key,'delete')
             handles=func_delete_data(handles);
-        elseif strcmp(eventdata.Key,'w') %strcmp(eventdata.Key,'uparrow')||
+        elseif strcmp(eventdata.Key,'w') 
             handles.movdir='up';
             handles=move_data_point(handles);
-        elseif strcmp(eventdata.Key,'s') %strcmp(eventdata.Key,'downarrow')||
+        elseif strcmp(eventdata.Key,'s') 
             handles.movdir='down';
             handles=move_data_point(handles);
-        elseif strcmp(eventdata.Key,'a') %strcmp(eventdata.Key,'leftarrow')||
+        elseif strcmp(eventdata.Key,'a') 
             handles.movdir='left';
             handles=move_data_point(handles);
-        elseif strcmp(eventdata.Key,'d') %strcmp(eventdata.Key,'rightarrow')||
+        elseif strcmp(eventdata.Key,'d') 
             handles.movdir='right';
             handles=move_data_point(handles);
-        elseif strcmp(eventdata.Key,'f')
-            %handles=func_add_data_series(handles);
-            handles=func_pick_anchor(handles);
-        
-        % % use for legend selection
-%         elseif strcmp(eventdata.Key,'w')
-%             handles=func_legend_select(handles);
-%         elseif strcmp(eventdata.Key,'d')
-%             handles=func_next_image(handles);
-%         elseif strcmp(eventdata.Key,'a')
-%             handles=func_previous_image(handles);
-
-        % % use for correcting anchor
-        elseif strcmp(eventdata.Key,'x')
-            handles=func_next_image(handles);
-        elseif strcmp(eventdata.Key,'z')
-            handles=func_previous_image(handles);
-        elseif strcmp(eventdata.Key,'c')
-            if strcmp(handles.data.imLib(ci).axis.yScale,'log')
-                handles.data.imLib(ci).axis.yScale='linear';
-                handles.Table_detailProperty.Data{8,2}='linear';
-            elseif strcmp(handles.data.imLib(ci).axis.yScale,'linear')
-                handles.data.imLib(ci).axis.yScale='log';
-                handles.Table_detailProperty.Data{8,2}='log';
-            end
-        elseif strcmp(eventdata.Key,'b')
-            if strcmp(handles.data.imLib(ci).axis.xScale,'log')
-                handles.data.imLib(ci).axis.xScale='linear';
-                handles.Table_detailProperty.Data{5,2}='linear';
-            elseif strcmp(handles.data.imLib(ci).axis.xScale,'linear')
-                handles.data.imLib(ci).axis.xScale='log';
-                handles.Table_detailProperty.Data{5,2}='log';
-            end  
-        % % S-N / E-N
-%         elseif strcmp(eventdata.Key,'v')
-%             if strcmp(handles.data.imLib(ci).axis.yLabel.data2,'amp')
-%                 handles.data.imLib(ci).axis.yLabel.data2='max';
-%                 handles.Table_detailProperty.Data{9,2}='max';
-%             elseif strcmp(handles.data.imLib(ci).axis.yLabel.data2,'max')
-%                 handles.data.imLib(ci).axis.yLabel.data2='range';
-%                 handles.Table_detailProperty.Data{9,2}='range';
-%             elseif strcmp(handles.data.imLib(ci).axis.yLabel.data2,'range')
-%                 handles.data.imLib(ci).axis.yLabel.data2='amp';
-%                 handles.Table_detailProperty.Data{9,2}='amp';                
-%             end  
-%         elseif strcmp(eventdata.Key,'n')
-%             if strcmp(handles.data.imLib(ci).axis.xLabel.unit,'cycles')
-%                 handles.data.imLib(ci).axis.xLabel.unit='reversals';
-%                 handles.Table_detailProperty.Data{7,2}='reversals';
-%             elseif strcmp(handles.data.imLib(ci).axis.xLabel.unit,'reversals')
-%                 handles.data.imLib(ci).axis.xLabel.unit='cycles';
-%                 handles.Table_detailProperty.Data{7,2}='cycles';
-%             end  
-
-        % dadn
-        elseif strcmp(eventdata.Key,'v')
-            if strcmp(handles.data.imLib(ci).axis.yLabel.unit,'m/cycle')
-                handles.data.imLib(ci).axis.yLabel.unit='mm/cycle';
-                handles.Table_detailProperty.Data{10,2}='mm/cycle';
-            elseif strcmp(handles.data.imLib(ci).axis.yLabel.unit,'mm/cycle')
-                handles.data.imLib(ci).axis.yLabel.unit='in/cycle';
-                handles.Table_detailProperty.Data{10,2}='in/cycle';
-            elseif strcmp(handles.data.imLib(ci).axis.yLabel.unit,'in/cycle')
-                handles.data.imLib(ci).axis.yLabel.unit='m/cycle';
-                handles.Table_detailProperty.Data{10,2}='m/cycle';                
-            end  
-        elseif strcmp(eventdata.Key,'n')
-            if strcmp(handles.data.imLib(ci).axis.xLabel.unit,'MPa_m')
-                handles.data.imLib(ci).axis.xLabel.unit='ksi_in';
-                handles.Table_detailProperty.Data{7,2}='ksi_in';
-            elseif strcmp(handles.data.imLib(ci).axis.xLabel.unit,'ksi_in')
-                handles.data.imLib(ci).axis.xLabel.unit='MPa_m';
-                handles.Table_detailProperty.Data{7,2}='MPa_m';
-            end             
-        elseif strcmp(eventdata.Key,'q')
-            if handles.anchorID>0            
-                handles.anchorID=mod(handles.anchorID,4)+1;
-                handles.selection.nsub=1;
-                handles.selection.subset=[handles.anchorID];
-                handles=select_axis_anchor_subset(handles,ci);            
-            end
         end
     end
     guidata(hObject,handles) 
     
-
-
 % --- Executes on key release with focus on figure1 or any of its controls.
 function figure1_WindowKeyReleaseFcn(hObject, eventdata, handles)
 % hObject    handle to figure1 (see GCBO)
@@ -547,7 +449,6 @@ function figure1_WindowKeyReleaseFcn(hObject, eventdata, handles)
 %	Character: character interpretation of the key(s) that was released
 %	Modifier: name(s) of the modifier key(s) (i.e., control, shift) released
 % handles    structure with handles and user data (see GUIDATA)
-
 
 function figure1_KeyPressFcn(hObject, eventdata, handles)
 
@@ -578,7 +479,6 @@ function Button_previous_Callback(hObject, eventdata, handles)
     handles=func_previous_image(handles);
     guidata(hObject, handles);
 
-
 % --- Executes on button press in Button_resize.
 function Button_resize_Callback(hObject, eventdata, handles)
 % hObject    handle to Button_resize (see GCBO)
@@ -587,7 +487,6 @@ function Button_resize_Callback(hObject, eventdata, handles)
     handles.axes1.XLim=handles.xlim0;
     handles.axes1.YLim=handles.ylim0;
     guidata(hObject, handles);   
-
 
 % --- Executes on button press in boxHL.
 function boxHL_Callback(hObject, eventdata, handles)
@@ -648,35 +547,7 @@ function But_importImg_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
     handles.data.path = [uigetdir(),'\'];
     handles=initialization(handles,'import');
-%     handles.data.imLib=[];
-%     handles.data.filelist={};
-%     tmp=dir(handles.data.path);
-%     nImg=0;
-%     imName={};
-%     for i=3:numel(tmp)
-%         if ~tmp(i).isdir
-%             nImg=nImg+1;
-%             len=numel(tmp(i).name);
-%             for j=len:-1:1
-%                 if strcmp(tmp(i).name(j),'.')
-%                     break;
-%                 end
-%             end
-%             handles.data.imLib(nImg).fullname=tmp(i).name;
-%             handles.data.imLib(nImg).name=tmp(i).name(1:j-1);
-%             handles.data.imLib(nImg).suffix=tmp(i).name(j:len);
-%             imName{nImg}=tmp(i).name;
-%             handles.data.filelist{nImg}=tmp(i).name;
-%         end
-%     end
-%     handles.data.nImg=nImg;
-%     handles.currentImg=1;
-%     handles=updateFigure(handles);
-%     handles=updateCounts(handles);
-%     handles.ListImage.String=imName;
     guidata(hObject,handles)
-
-
 
 % --- Executes on button press in But_delLegendBox.
 function But_delLegendBox_Callback(hObject, eventdata, handles)
@@ -686,17 +557,13 @@ function But_delLegendBox_Callback(hObject, eventdata, handles)
     handles=func_del_legend_box(handles);
     guidata(hObject,handles) 
         
-
 % --- Executes on button press in But_segment.
 function But_segment_Callback(hObject, eventdata, handles)
 % hObject    handle to But_segment (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-    handles=segement_pic(handles);
+    handles=func_segment_pic(handles);
     guidata(hObject,handles) 
-    savedata=handles.data;
-    save([handles.data.path,'project.mat'],'savedata');
-
 
 % --- Executes on button press in But_saveProject.
 function But_saveProject_Callback(hObject, eventdata, handles)
@@ -725,40 +592,6 @@ function But_loadProject_Callback(hObject, eventdata, handles)
         handles.data.file=file;
         handles.data=savedata;
         handles=initialization(handles,'load');
-%         handles.nImg=numel(handles.data.imLib);
-%         handles.currentImg=1;
-%         handles.colorChannel=1;  % 1:rgb; 2:grayscale; 3:black-white     
-%         handles.inAxes=0;
-%         handles.inAxes0=0;
-%         handles.currentProperty='';
-%         handles.currentTable='';
-%         handles.detectData=struct();
-%         handles.detectData.select=0;
-%         handles.detectData.detect=0;
-%         handles.detectData.id=0;
-% 
-%         handles.plot.sepobj.active=0; 
-% 
-%         handles.plot.selection=struct();
-%         handles.plot.selection.hd=[];
-% 
-%         handles=updateFigure(handles);
-%         handles=updateColorBut(handles);        
-%         handles=updateCounts(handles);
-%         handles.translate=0;
-%         handles=boxselectInitialize(handles);
-%         handles=boxSelectBut_initialize(handles);
-%         handles=legendSelectBut_initialize(handles);
-%         handles.Text_numBox.String=['nbox: ',num2str(handles.boxselect.n)];
-%         handles.Text_name.String=[handles.data.imLib(handles.currentImg).name,handles.data.imLib(handles.currentImg).suffix];
-%         handles.Edit_processRange.String=['1 - ',num2str(handles.nImg)];
-%         handles.processRange=[1,handles.nImg];
-% 
-%         handles=display_file_table(handles);
-%         handles=selectionInitialize(handles);
-%         handles=setting_initialize(handles);
-%         handles=datastruct_initialize(handles);
-%         handles=data_page_initialization(handles);
         guidata(hObject,handles)
     end
 
@@ -769,7 +602,6 @@ function But_analyseLegend_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)    
     handles=func_analyse_legend(handles);
     guidata(hObject,handles)
-
     
 % --- Executes on button press in But_symbolRecognition.
 function But_symbolRecognition_Callback(hObject, eventdata, handles)
@@ -777,7 +609,6 @@ function But_symbolRecognition_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     handles=func_symbol_recognition(handles);
-    %handles=func_symbol_recognition_single(handles);
     guidata(hObject,handles)
 
 % --- Executes on button press in But_colorRecognition.
@@ -795,6 +626,7 @@ function But_overlapData_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)    
     handles=func_symbol_recognition(handles);
     guidata(hObject,handles)     
+
 % --- Executes on button press in But_addPickedData.
 function But_addPickedData_Callback(hObject, eventdata, handles)
 % hObject    handle to But_addPickedData (see GCBO)
@@ -819,7 +651,6 @@ function But_addDataSeries_Callback(hObject, eventdata, handles)
     handles=func_add_data_series(handles);
     guidata(hObject,handles)
 
-    
 % --- Executes on button press in But_deleteData.
 function But_deleteData_Callback(hObject, eventdata, handles)
 % hObject    handle to But_deleteData (see GCBO)
@@ -875,7 +706,6 @@ function But_resetColor_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
     handles=func_reset_color(handles);
     guidata(hObject,handles)    
-
     
 % --- Executes on button press in But_eraser.
 function But_eraser_Callback(hObject, eventdata, handles)
@@ -885,7 +715,6 @@ function But_eraser_Callback(hObject, eventdata, handles)
     handles=func_eraser_on(handles);
     guidata(hObject,handles)    
 
-    
 % --- Executes on button press in But_shapeOrColorPick.
 function But_shapeOrColorPick_Callback(hObject, eventdata, handles)
 % hObject    handle to But_shapeOrColorPick (see GCBO)
@@ -995,7 +824,6 @@ function Edit_processRange_Callback(hObject, eventdata, handles)
     hObject.String=[num2str(handles.processRange(1)),' - ',num2str(handles.processRange(2))];
     guidata(hObject,handles)
     
-
 % --- Executes during object creation, after setting all properties.
 function Edit_processRange_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to Edit_processRange (see GCBO)
@@ -1007,8 +835,6 @@ function Edit_processRange_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
 
 function Edit_eraseSize_Callback(hObject, eventdata, handles)
 % hObject    handle to Edit_eraseSize (see GCBO)
@@ -1037,7 +863,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-
 function Edit_colorTolerance_Callback(hObject, eventdata, handles)
 % hObject    handle to Edit_colorTolerance (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -1064,6 +889,32 @@ function Edit_colorTolerance_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+function Edit_docPath_Callback(hObject, eventdata, handles)
+% hObject    handle to Edit_docPath (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of Edit_docPath as text
+%        str2double(get(hObject,'String')) returns contents of Edit_docPath as a double
+    tmp=get(hObject,'String');
+    if exist(tmp)
+        handles.doc_path=tmp;
+    end
+    hObject.String=tmp;
+    guidata(hObject,handles)
+
+% --- Executes during object creation, after setting all properties.
+function Edit_docPath_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to Edit_docPath (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end    
 
 % --- Executes during object creation, after setting all properties.
 function Table_msg_CreateFcn(hObject, eventdata, handles)
@@ -1147,8 +998,7 @@ function Table_property_CellEditCallback(hObject, eventdata, handles)
         end
     end
     guidata(hObject,handles)
-
-    
+   
 % --- Executes during object creation, after setting all properties.
 function Table_detailProperty_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to Table_detailProperty (see GCBO)
@@ -1160,8 +1010,7 @@ function Table_detailProperty_CreateFcn(hObject, eventdata, handles)
     hObject.Data={};
     hObject.ColumnEditable=logical([0,1]);
     hObject.ColumnWidth={'auto','auto'};    
-
-    
+   
 % --- Executes when selected cell(s) is changed in Table_property.
 function Table_detailProperty_CellSelectionCallback(hObject, eventdata, handles)
 % hObject    handle to Table_property (see GCBO)
@@ -1280,7 +1129,7 @@ function Table_detailProperty_CellEditCallback(hObject, eventdata, handles)
                         handles.data.imLib(ci).axis.yAnchor.data(2)=num;
                     end
                 end                
-            elseif (id(2)==2)&&((id(1)==5)||(id(1)==8))
+            elseif (id(2)==2)&&((id(1)==5)||(id(1)==6))
                 if isequal(eventdata.EditData,'log') || isequal(eventdata.EditData,'linear')
                     mod=1;
                     hObject.Data{id(1),id(2)}=eventdata.EditData;
@@ -1293,21 +1142,9 @@ function Table_detailProperty_CellEditCallback(hObject, eventdata, handles)
                 end  
                 if id(1)==5
                     handles.data.imLib(ci).axis.xScale=hObject.Data{id(1),id(2)};
-                elseif id(1)==8
+                elseif id(1)==6
                     handles.data.imLib(ci).axis.yScale=hObject.Data{id(1),id(2)};
                 end                
-            elseif (id(2)==2)&&((id(1)==6)||(id(1)==7)||(id(1)==9)||(id(1)==10))
-                mod=1;
-                hObject.Data{id(1),id(2)}=eventdata.EditData;
-                if id(1)==6
-                    handles.data.imLib(ci).axis.xLabel.data2=hObject.Data{id(1),id(2)};
-                elseif id(1)==7
-                    handles.data.imLib(ci).axis.xLabel.unit=hObject.Data{id(1),id(2)};
-                elseif id(1)==9
-                    handles.data.imLib(ci).axis.yLabel.data2=hObject.Data{id(1),id(2)};
-                elseif id(1)==10
-                    handles.data.imLib(ci).axis.yLabel.unit=hObject.Data{id(1),id(2)};
-                end
             end
                 
             if ~mod
@@ -1371,8 +1208,7 @@ function But_dispSetting_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
     handles=display_setting_table(handles);
     guidata(hObject,handles)
-    
-
+   
 % --- Executes on button press in But_dispData.
 function But_dispData_Callback(hObject, eventdata, handles)
 % hObject    handle to But_dispData (see GCBO)
@@ -1380,8 +1216,7 @@ function But_dispData_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
     handles=display_data_table(handles);
     guidata(hObject,handles)
-
-    
+  
 % --- Executes on button press in But_autorun.
 function But_autorun_Callback(hObject, eventdata, handles)
 % hObject    handle to But_autorun (see GCBO)
@@ -1419,9 +1254,16 @@ function But_deleteDataSeries_Callback(hObject, eventdata, handles)
 % hObject    handle to But_deleteDataSeries (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)    
-    handles=func_delete_data_seires(handles);
+    handles=func_delete_data_series(handles);
     guidata(hObject,handles)
-    
+
+% --- Executes on button press in But_openDoc.
+function But_openDoc_Callback(hObject, eventdata, handles)
+% hObject    handle to But_openDoc (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    handles=func_open_doc(handles);
+    guidata(hObject,handles)
     
 % --- Executes on button press in RadBut_rgb.
 function RadBut_rgb_Callback(hObject, eventdata, handles)
@@ -1504,7 +1346,7 @@ function CBox_sepobj_Callback(hObject, eventdata, handles)
 
 function handles=initialization(handles,type)
     if strcmp(type,'init')
-        handles.data.path='';% E:\Data\Literature Data\test dataset\  'E:\Data\Literature Data\AM fatigue 3\figure\EN\'; %'D:\Tsinghua\Project\Fatigue Data Framework\search data\AM fatigue\selected pic\';%;
+        handles.data.path='';
     end
     fig=handles.figure1;
     fig.Units='pixels';
@@ -1553,7 +1395,6 @@ function handles=initialization(handles,type)
     end
     
     
-    
     handles.currentImg=1;
     handles.colorChannel=1;  % 1:rgb; 2:grayscale; 3:black-white     
     handles.inAxes=0;
@@ -1578,6 +1419,7 @@ function handles=initialization(handles,type)
     handles=boxselectInitialize(handles);
     handles=boxSelectBut_initialize(handles);
     handles=legendSelectBut_initialize(handles);
+    handles.segment=0;
     handles.Text_numBox.String=['nbox: ',num2str(handles.boxselect.n)];
     handles=eraser_initialize(handles);
     if handles.data.nImg>0
@@ -1606,6 +1448,9 @@ function handles=initialization(handles,type)
     
     handles.keyon=0;    % will be switch on in the func_key_onoff()
     handles=func_key_onoff(handles);
+    
+    handles.doc_path='';
+    
     
 function handles=setting_initialize(handles)
     handles.setting.bw_thre=0.8;
@@ -1640,7 +1485,8 @@ function handles=datastruct_initialize(handles)
          'Data';};
      n=numel(datalist);
      ci=handles.currentImg;
-     for i=1:handles.data.imLib(ci).data.nseries
+     n2=numel(handles.data.imLib(ci).data.series);
+     for i=1:n2
          datalist{i+n}=['  |-- series_',num2str(i)];
      end
      handles.data.datalist=datalist;
@@ -1661,7 +1507,6 @@ function handles=legendSelectBut_initialize(handles)
 % handles    structure with handles and user data (see GUIDATA)
     handles.legendselect=0;
     handles.But_legendSelect.BackgroundColor=[0.94,0.94,0.94];
-    %handles.But_legendSelect.BackgroundColor=[0.7,0.7,1.0];
     
  function handles=boxselectInitialize(handles)
     if isfield(handles,'boxselect') 
@@ -1696,7 +1541,7 @@ function handles=axis_property_initialization(handles)
     
 function handles=legend_property_initialization(handles)
     handles.legendselect=0;
-    handle.boxselect.flag=0;
+    handles.boxselect.flag=0;
     handles.add_data_series=0;
     
 function handles=data_property_initialization(handles) 
@@ -1766,14 +1611,10 @@ function handles=updateFigure(handles)
     handles.axes1.DataAspectRatio=[1,1,1];
     handles.xlim0=handles.axes1.XLim;
     handles.ylim0=handles.axes1.YLim;
-    handles.Text_name.String=[handles.data.imLib(handles.currentImg).name,handles.data.imLib(handles.currentImg).suffix];
     
+    handles.Text_name.String=[handles.data.imLib(handles.currentImg).name,handles.data.imLib(handles.currentImg).suffix];
     handles=updatePlot_sepobj(handles);
     
-    %handles.imhandle.Clipping='off';
-    %ax=get(handles.imhandle,'parent');
-    %ax.Visible='on';
-    %ax.Clipping='off';
 
 function handles=updateImage(handles)
     if handles.data.nImg==0
@@ -1965,7 +1806,8 @@ function event=detect_mouse_change(hObject,handles)
         else
             hObject.Pointer='arrow';
         end
-    end    
+    end  
+    
 function handles=update_boxselect(handles)
     nc=handles.boxselect.current;
     ci=handles.currentImg;
@@ -2055,27 +1897,41 @@ function handles=boxSelection(handles,mapos)
         end
     end
     
-function handles=segement_pic(handles)
-    ci=handles.currentImg;
-    n=handles.boxselect.n;
-    imdata=handles.data.imLib(ci);
-    if n>0
-        for i=1:n
-            rcrng=handles.boxselect.rcrng(i,:);
-            im0=handles.rgb(rcrng(1):rcrng(2),rcrng(3):rcrng(4),:);
-            if ~exist([handles.data.path,'segmentation'])
-                mkdir([handles.data.path,'segmentation'])
-            end
-            if i<10
-                imwrite(im0,[handles.data.path,'segmentation\',imdata.name,'_0',num2str(i),imdata.suffix])
-            else
-                imwrite(im0,[handles.data.path,'segmentation\',imdata.name,'_',num2str(i),imdata.suffix])
-            end
-        end
-        handles.data.imLib(ci).segmented=1;
-    end
+function handles=func_segment_pic(handles)
+    if handles.segment==0
+        handles.segment=1;
+        handles.boxselect.flag=1;
+    else
+        handles.boxselect.flag=0;
+        handles.segment=0;
+        ci=handles.currentImg;
 
-       
+        n=handles.boxselect.n;
+        imdata=handles.data.imLib(ci);
+        if n>0
+            for i=1:n
+                rcrng=handles.boxselect.rcrng(i,:);
+                im0=handles.rgb(rcrng(1):rcrng(2),rcrng(3):rcrng(4),:);
+                if ~exist([handles.data.path,'segmentation'])
+                    mkdir([handles.data.path,'segmentation'])
+                end
+                if i<10
+                    imwrite(im0,[handles.data.path,'segmentation\',imdata.name,'_0',num2str(i),imdata.suffix])
+                else
+                    imwrite(im0,[handles.data.path,'segmentation\',imdata.name,'_',num2str(i),imdata.suffix])
+                end
+            end
+            handles.data.imLib(ci).segmented=1;
+        end
+        handles=boxselectInitialize(handles);
+        handles=selectionInitialize(handles);
+        handles=updateImage2(handles);
+    end
+    if handles.segment
+        handles.But_segment.BackgroundColor=[0.7,0.7,1.0];
+    else
+        handles.But_segment.BackgroundColor=[0.94,0.94,0.94];
+    end                           
     
 function handles=display_setting_table(handles)    
     handles.Table_property.Data=handles.data.settinglist;
@@ -2185,6 +2041,7 @@ function handles=display_data_detail(handles,term)
     elseif ~isempty(strfind(term,'series'))
         n=str2num(term(8:end));
         handles.Table_detailProperty.ColumnName={'id','x','y','runout'};
+        handles.Table_detailProperty.ColumnWidth={50,60,60,50};
         handles.Table_detailProperty.ColumnEditable=logical([0,0,0,1]);
         nr=0;
         if isfield(handles.data.imLib(ci).data.series(n),'pdata')
@@ -2193,23 +2050,23 @@ function handles=display_data_detail(handles,term)
         end
         if isfield(handles.data.imLib(ci).data.series(n),'runout')
             flag_ro=1;
-            ro=handles.data.imLib(ci).data.series(n).runout;
+            runout=handles.data.imLib(ci).data.series(n).runout;
         else
             flag_ro=0;
         end
-%         if nr>0
-%             for i=1:nr
-%                 data{i,1}=['data ',num2str(i)];
-%                 data{i,2}=pd(i,1);
-%                 data{i,3}=pd(i,2);
-%                 if flag_ro==1;
-%                     data{i,4}=ro(i);
-%                 else
-%                     data{i,4}=nan;
-%                 end
-%             end  
-%             handles.Table_detailProperty.Data=data;   
-%         end 
+        if nr>0 && ~handles.eraser_on
+            for i=1:nr
+                data{i,1}=['data ',num2str(i)];
+                data{i,2}=pd(i,1);
+                data{i,3}=pd(i,2);
+                if flag_ro==1;
+                    data{i,4}=runout(i);
+                else
+                    data{i,4}=nan;
+                end
+            end  
+            handles.Table_detailProperty.Data=data;   
+        end 
     elseif strcmp(term,'xAnchor')||strcmp(term,'yAnchor')
         xdata=handles.data.imLib(ci).axis.xAnchor.data;
         ydata=handles.data.imLib(ci).axis.yAnchor.data;        
@@ -2241,16 +2098,8 @@ function handles=display_data_detail(handles,term)
         end          
         data{5,1}='xScale';
         data{5,2}=handles.data.imLib(ci).axis.xScale;
-        data{8,1}='yScale';
-        data{8,2}=handles.data.imLib(ci).axis.yScale;  
-        data{6,1}='xLabel';
-        data{6,2}=handles.data.imLib(ci).axis.xLabel.data2;
-        data{9,1}='yLabel';
-        data{9,2}=handles.data.imLib(ci).axis.yLabel.data2;        
-        data{7,1}='xUnit';
-        data{7,2}=handles.data.imLib(ci).axis.xLabel.unit;    
-        data{10,1}='yUnit';
-        data{10,2}=handles.data.imLib(ci).axis.yLabel.unit;          
+        data{6,1}='yScale';
+        data{6,2}=handles.data.imLib(ci).axis.yScale;         
         handles.Table_detailProperty.Data=data;      
     else    
         handles.currentProperty='';
@@ -2382,7 +2231,6 @@ function [handles,stat]=updateSetting(handles,item,num)
     end
 
     
-    
 function handles=addMsg(handles,msg)
     string=flip(handles.Table_msg.Data);
     n=numel(string);
@@ -2459,13 +2307,6 @@ function handles=func_next_image(handles)
         end
         handles=detail_page_initialization(handles);
         
-        % % use for correting anchors
-        handles.currentProperties='xAnchor';
-        handles=display_data_detail(handles,'xAnchor');
-        handles=show_item_box(handles,'xAnchor');
-        
-        % % for quick legend seletion
-        %handles=func_legend_select(handles);
     end
     
 function handles=func_previous_image(handles)    
@@ -2494,11 +2335,6 @@ function handles=func_previous_image(handles)
             handles=display_data_table(handles);
         end
         handles=detail_page_initialization(handles); 
-        
-        % % use for correting anchors
-        handles.currentProperties='xAnchor';
-        handles=display_data_detail(handles,'xAnchor');
-        handles=show_item_box(handles,'xAnchor');
         
     end       
     
@@ -2704,6 +2540,7 @@ function handles=func_symbol_recognition_single(handles)
         symbol{i}=(lgd.item(i).symbol-1)*(0-1);
         color{i}=lgd.item(i).color;
     end
+    handles.data.imLib(ci).data.nseries=handles.data.imLib(ci).legend.nitem;
     handles=addMsg(handles,'EXECUTING symbol_recognition.');    
     try
         [ifreg,xreg,yreg,type,overlap]=single_shape_reconition(symbol,color,row,col,box,center,ob_wh,handles.bw,incbox,excbox,excid);
@@ -2769,6 +2606,7 @@ function handles=func_symbol_recognition_color(handles)
         symbol{i}=(lgd.item(i).symbol-1)*(0-1);
         color{i}=lgd.item(i).color;
     end
+    handles.data.imLib(ci).data.nseries=lgd.nitem;
     handles=addMsg(handles,'EXECUTING symbol_recognition.');    
     try
         data=extract_data_by_color(handles.rgb,color,incbox,excbox);
@@ -2780,7 +2618,8 @@ function handles=func_symbol_recognition_color(handles)
     end
     handles=datastruct_initialize(handles);
     handles=detail_page_initialization(handles);    
-
+    handles=display_data_table(handles);
+    
 function handles=func_symbol_recognition(handles)
     ci=handles.currentImg;
     if isempty(handles.gray)
@@ -2842,6 +2681,7 @@ function handles=func_symbol_recognition(handles)
         symbol_bw{i}=lgd.item(i).symbol;
         color{i}=lgd.item(i).color;
     end
+    handles.data.imLib(ci).data.nseries=lgd.nitem;
     handles=addMsg(handles,'EXECUTING symbol_recognition.');    
     try
         data=extract_overlap_data(handles.rgb,handles.bw,symbol,symbol_bw,incbox,excbox);
@@ -2853,6 +2693,7 @@ function handles=func_symbol_recognition(handles)
     end
     handles=datastruct_initialize(handles);
     handles=detail_page_initialization(handles);    
+    handles=display_data_table(handles);
     
 function handles=func_add_picked_data(handles)
     ci=handles.currentImg;
@@ -2936,17 +2777,27 @@ function handles=func_delete_data(handles)
     subset=handles.selection.subset;
     ct=0;
     pdata=handles.data.imLib(ci).data.series(sid).pdata;
+    runout=handles.data.imLib(ci).data.series(sid).runout;
+    auto=handles.data.imLib(ci).data.series(sid).auto;
     pd_tmp=[];  % temporary pdata
     hd_tmp=[];  % temporary handles;
+    ro_tmp=[];
+    auto_tmp=[];
     for i=1:n
         delete(handles.plot.selection.hd(i));
         if ~ismember(i,subset)
             ct=ct+1;
             pd_tmp(ct,:)=pdata(i,:);
+            ro_tmp(ct)=runout(i);
+            auto_tmp(ct)=auto(i);
         end
     end
     handles.data.imLib(ci).data.series(sid).pdata=[];
     handles.data.imLib(ci).data.series(sid).pdata=pd_tmp;
+    handles.data.imLib(ci).data.series(sid).auto=[];
+    handles.data.imLib(ci).data.series(sid).auto=auto_tmp;
+    handles.data.imLib(ci).data.series(sid).runout=[];
+    handles.data.imLib(ci).data.series(sid).runout=ro_tmp;    
     handles.selection.n=n-nsub;
     handles.selection.nsub=0;
     handles.selection.subset=[];
@@ -2979,16 +2830,13 @@ function handles=func_autorun(handles)
         try
             disp([num2str(i),'analyse_legend'])
             handles=func_analyse_legend(handles);        
-%             disp([num2str(i),'symbol_recognition'])
-%             handles=func_symbol_recognition(handles);
+            disp([num2str(i),'symbol_recognition'])
+            handles=func_symbol_recognition(handles);
         end
         handles.data.msg=handles.Table_msg.Data;
         savedata=handles.data;
-        if mod(ct,10)==0
-            %save(['E:\Data\Literature Data\project.mat'],'savedata');
-        end
     end
-    %save(['E:\Data\Literature Data\project.mat'],'savedata');
+   
 
 function handles=func_autorun2(handles)
     rng=handles.processRange;
@@ -3021,11 +2869,9 @@ function handles=func_autorun2(handles)
         end
         handles.data.msg=handles.Table_msg.Data;
         savedata=handles.data;
-        %if mod(ct,10)==0
-        %    save(['E:\Data\Literature Data\project.mat'],'savedata');
-        %end
+
     end
-    %save(['E:\Data\Literature Data\project.mat'],'savedata');    
+    
     
 function handles=func_auto_axis(handles)    
     rng=handles.processRange;
@@ -3049,11 +2895,9 @@ function handles=func_auto_axis(handles)
         end
         handles.data.msg=handles.Table_msg.Data;
         savedata=handles.data;
-        if mod(ct,10)==0
-            save(['E:\Data\Literature Data\project_1-500_axis.mat'],'savedata');
-        end        
+      
     end
-    save(['E:\Data\Literature Data\project_1-500_axis.mat'],'savedata');
+
     
 function handles=func_legend_select(handles)
     if handles.legendselect==0
@@ -3092,7 +2936,7 @@ function handles=func_clear_data_seires(handles)
     end
     handles=display_data_detail(handles,'');
 
-function handles=func_delete_data_seires(handles)
+function handles=func_delete_data_series(handles)
     ci=handles.currentImg;
     cp=handles.currentProperty;
     n=str2num(cp(8:end));    
@@ -3227,6 +3071,23 @@ function handles=func_switch_shape_color_pick(handles)
         handles.data.imLib(ci).data.colorpick=0;
     end
 
+    
+function handles=func_open_doc(handles)
+    ci=handles.currentImg;
+    f0=handles.data.imLib(ci).name;
+    k=strfind(f0,'[');
+    if numel(k)>0
+        file=[f0(1:k(1)-1),'.pdf'];
+    else
+        file=[f0,'.pdf'];
+    end
+    if exist([handles.doc_path,file])
+        web([handles.doc_path,file],'-browser');
+    else
+        disp([handles.doc_path,file,' NOT EXIST']);
+    end
+
+    
 function handles=add_data_point(handles,pos0)
     cp=handles.currentProperty;
     ci=handles.currentImg;
@@ -3269,10 +3130,6 @@ function handles=savedata_detect_coordinate(handles,ci,pos_xa,pos_ya,coordObid)
 function handles=savedata_axis_character(handles,xxlabel,yylabel,xxlabels,yylabels,xlabcl_box,ylabcl_box,xxtick_num,yytick_num,xxtick_str,yytick_str,xtlcl_box,ytlcl_box)
     % % xlabel
     ci=handles.currentImg;
-%     if handles.data.imLib(ci).axis.xLabel.exist==1
-%         handles.data.imLib(ci).axis.xLabel.n_mod=handles.data.imLib(ci).axis.xLabel.n_mod+1;
-%         handles.data.imLib(ci).axis.xLabel.mod(handles.data.imLib(ci).axis.xLabel.n_mod)=handles.data.imLib(ci).axis.xLabel.data;
-%     end    
     handles.data.imLib(ci).axis.xLabel.exist=1;
     handles.data.imLib(ci).axis.xLabel.state='auto';
     handles.data.imLib(ci).axis.xLabel.text=xxlabel;
@@ -3280,10 +3137,6 @@ function handles=savedata_axis_character(handles,xxlabel,yylabel,xxlabels,yylabe
     handles.data.imLib(ci).axis.xLabel.box=xlabcl_box;
     
     % % ylabel
-%     if handles.data.imLib(ci).axis.yLabel.exist==1
-%         handles.data.imLib(ci).axis.yLabel.n_mod=handles.data.imLib(ci).axis.yLabel.n_mod+1;
-%         handles.data.imLib(ci).axis.yLabel.mod(handles.data.imLib(ci).axis.yLabel.n_mod)=handles.data.imLib(ci).axis.yLabel.data;
-%     end    
     handles.data.imLib(ci).axis.yLabel.exist=1;
     handles.data.imLib(ci).axis.yLabel.state='auto';
     handles.data.imLib(ci).axis.yLabel.text=yylabel;
@@ -3291,27 +3144,43 @@ function handles=savedata_axis_character(handles,xxlabel,yylabel,xxlabels,yylabe
     handles.data.imLib(ci).axis.yLabel.box=ylabcl_box;
     
     % % xticks
-%     if handles.data.imLib(ci).axis.xTicks.exist==1
-%         handles.data.imLib(ci).axis.xTicks.n_mod=handles.data.imLib(ci).axis.xTicks.n_mod+1;
-%         handles.data.imLib(ci).axis.xTicks.mod(handles.data.imLib(ci).axis.xTicks.n_mod)=handles.data.imLib(ci).axis.xTicks.data;
-%     end    
     handles.data.imLib(ci).axis.xTicks.exist=1;
     handles.data.imLib(ci).axis.xTicks.state='auto';
     handles.data.imLib(ci).axis.xTicks.box=xtlcl_box;
     handles.data.imLib(ci).axis.xTicks.data=xxtick_num;
     handles.data.imLib(ci).axis.xTicks.datastr=xxtick_str;
     
-    % % yticks
-%     if handles.data.imLib(ci).axis.yTicks.exist==1
-%         handles.data.imLib(ci).axis.yTicks.n_mod=handles.data.imLib(ci).axis.yTicks.n_mod+1;
-%         handles.data.imLib(ci).axis.yTicks.mod(handles.data.imLib(ci).axis.yTicks.n_mod)=handles.data.imLib(ci).axis.yTicks.data;
-%     end      
+    % % yticks 
     handles.data.imLib(ci).axis.yTicks.exist=1;
     handles.data.imLib(ci).axis.yTicks.state='auto';
     handles.data.imLib(ci).axis.yTicks.box=ytlcl_box;
     handles.data.imLib(ci).axis.yTicks.data=yytick_num;
     handles.data.imLib(ci).axis.yTicks.datastr=yytick_str;
 
+    % % xscale
+    handles.data.imLib(ci).axis.xScale='log';
+    if numel(xxtick_num)>=3
+        dn1=xxtick_num(2)-xxtick_num(1);
+        dn2=xxtick_num(3)-xxtick_num(2);
+        dp1=mean(xtlcl_box(2,1:2))-mean(xtlcl_box(1,1:2));
+        dp2=mean(xtlcl_box(3,1:2))-mean(xtlcl_box(2,1:2));
+        if dn1==dn2  &&  abs(dp1-dp2)/dp1<0.05
+            handles.data.imLib(ci).axis.xScale='linear';
+        end
+    end
+ 
+    % % yscale
+    handles.data.imLib(ci).axis.yScale='log';
+    if numel(yytick_num)>=3
+        dn1=yytick_num(2)-yytick_num(1);
+        dn2=yytick_num(3)-yytick_num(2);
+        dp1=mean(ytlcl_box(2,3:4))-mean(ytlcl_box(1,3:4));
+        dp2=mean(ytlcl_box(3,3:4))-mean(ytlcl_box(2,3:4));
+        if dn1==dn2  &&  abs((dp1-dp2)/dp1)<0.05
+            handles.data.imLib(ci).axis.yScale='linear';
+        end
+    end    
+    
 function handles=savedata_calibrate_axis(handles,px1,px2,py1,py2,x1,x2,y1,y2)    
     ci=handles.currentImg;
     handles.data.imLib(ci).axis.xAnchor.exist=1;
@@ -3442,13 +3311,13 @@ function   handles=imLib_var_init(handles)
         handles.data.imLib(i).axis.yLabel.exist=0;
         handles.data.imLib(i).axis.xTicks.exist=0;
         handles.data.imLib(i).axis.yTicks.exist=0;  
-        handles.data.imLib(i).axis.xLabel.data2='life';
-        handles.data.imLib(i).axis.yLabel.data2='amp';
-        handles.data.imLib(i).axis.xLabel.unit='cycles';
-        handles.data.imLib(i).axis.yLabel.unit='MPa';        
+        handles.data.imLib(i).axis.xLabel.data2='';
+        handles.data.imLib(i).axis.yLabel.data2='';
+        handles.data.imLib(i).axis.xLabel.unit='';
+        handles.data.imLib(i).axis.yLabel.unit='';        
         % xScale, yScale
-        handles.data.imLib(i).axis.xScale='log';
-        handles.data.imLib(i).axis.yScale='linear';
+        handles.data.imLib(i).axis.xScale='';
+        handles.data.imLib(i).axis.yScale='';
         % xAnchor,yAnchor
         handles.data.imLib(i).axis.xAnchor=struct();
         handles.data.imLib(i).axis.xAnchor.pos=[nan,nan;nan,nan];

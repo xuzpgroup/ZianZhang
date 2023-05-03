@@ -1,4 +1,4 @@
-function [symbol,word,color,itembox]=process_legend(legendbox,row,col,center,box,ob_wh,bw,rgb)
+function [symbol,symbol_rgb,word,color,itembox]=process_legend(legendbox,row,col,center,box,ob_wh,bw,rgb)
     dictionary='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,[](){}+-%^*=';
     DEBUG=0;
     n=size(box,1);
@@ -157,6 +157,7 @@ function [symbol,word,color,itembox]=process_legend(legendbox,row,col,center,box
         c1=max(box(id,1),lb(3));
         c2=min(box(id,2),lb(4));
         symbol{i}=bw(r1:r2,c1:c2);
+        symbol_rgb{i}=rgb(r1:r2,c1:c2,:);
         % % process the color
         id=symbolcl{i}(1);   % generally the symbol is fully connected and only one symbol cluster exist, so used only the first one
         red=[];
