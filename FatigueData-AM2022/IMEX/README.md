@@ -5,6 +5,8 @@ The app is originally developed for fatigue data extraction, but can be generali
 
 The app is developed with MATLAB R2018b, with add-on `Computer Vison Toolbox v8.2` installed. 
 
-The app is launched by running `imex.m` in MATLAB. See `imex_manual.pdf` for a quickstart.
+The app is launched by running `imex.m` in MATLAB. See `imex_manual.pdf` for the usage.
 
-![imex](./imex_gui.jpg "IMEX GUI")
+<br>
+
+<img src="./imex_gui.jpg" width = "600" alt="IMEX GUI" align=left/>
