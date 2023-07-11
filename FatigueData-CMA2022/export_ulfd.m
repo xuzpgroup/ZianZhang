@@ -7,68 +7,68 @@ path='./';
 filename='ulfd.xml';
 article_id=1;
 dataset_id=1;
-dn=export(art(article_id).metadata,art(article_id).scidata.datasets(dataset_id));
-xmlwrite([path,filename],dn);
+ulfd=exportULFD(art(article_id).metadata,art(article_id).scidata.datasets(dataset_id));
+xmlwrite([path,filename],ulfd);
 
-function dn=export(meta,ds)
-    dn=com.mathworks.xml.XMLUtils.createDocument('ulfd');
-    ulfd=dn.getDocumentElement;
+function ulfd=exportULFD(meta,ds)
+    ulfd=com.mathworks.xml.XMLUtils.createDocument('ulfd');
+    ulfd=ulfd.getDocumentElement;
     
-    mt=dn.createElement('meta');
-    ref=dn.createElement('reference');
-    ref.appendChild(add_string(dn,'doi',meta.doi));
-    ref.appendChild(add_string(dn,'title',meta.title));
-    ref.appendChild(add_string(dn,'source',meta.source));
-    ref.appendChild(add_num(dn,'year',meta.year));
-    ref.appendChild(add_string_cell(dn,'author',meta.author));
-    ref.appendChild(add_string_cell(dn,'institution',meta.institution));
-    ref.appendChild(add_string_cell(dn,'country_region',meta.country_region));
-    ref.appendChild(add_string_cell(dn,'fund',meta.fund));
+    mt=ulfd.createElement('meta');
+    ref=ulfd.createElement('reference');
+    ref.appendChild(add_string(ulfd,'doi',meta.doi));
+    ref.appendChild(add_string(ulfd,'title',meta.title));
+    ref.appendChild(add_string(ulfd,'source',meta.source));
+    ref.appendChild(add_num(ulfd,'year',meta.year));
+    ref.appendChild(add_string_cell(ulfd,'author',meta.author));
+    ref.appendChild(add_string_cell(ulfd,'institution',meta.institution));
+    ref.appendChild(add_string_cell(ulfd,'country_region',meta.country_region));
+    ref.appendChild(add_string_cell(ulfd,'fund',meta.fund));
     mt.appendChild(ref);
     ulfd.appendChild(mt);
     
-    mat=dn.createElement('materials');
-    mat.appendChild(add_string(dn,'type',ds.materials.mat_type));
-    mat.appendChild(add_string(dn,'name',ds.materials.mat_name));
-    mat.appendChild(add_string(dn,'percent_type',ds.materials.percent_type));
-    mat.appendChild(add_string(dn,'atomic_structure',ds.materials.atomic_struct));
-    mat.appendChild(add_composition(dn,'composition',ds.materials.composition));
+    mat=ulfd.createElement('materials');
+    mat.appendChild(add_string(ulfd,'type',ds.materials.mat_type));
+    mat.appendChild(add_string(ulfd,'name',ds.materials.mat_name));
+    mat.appendChild(add_string(ulfd,'percent_type',ds.materials.percent_type));
+    mat.appendChild(add_string(ulfd,'atomic_structure',ds.materials.atomic_struct));
+    mat.appendChild(add_composition(ulfd,'composition',ds.materials.composition));
     ulfd.appendChild(mat);
     
-    proc=dn.createElement('processing');
-    proc.appendChild(add_processing(dn,'processing_sequence',ds.processing.proc_para,ds.processing.proc_seq));
-    proc.appendChild(add_string(dn,'ingot_description',ds.processing.ingot_desc));
-    proc.appendChild(add_num_array(dn,'ingot_size',ds.processing.ingot_size));
-    proc.appendChild(add_processing(dn,'surface_treatment_sequence',ds.processing.surf_para,ds.processing.surf_seq));
+    proc=ulfd.createElement('processing');
+    proc.appendChild(add_processing(ulfd,'processing_sequence',ds.processing.proc_para,ds.processing.proc_seq));
+    proc.appendChild(add_string(ulfd,'ingot_description',ds.processing.ingot_desc));
+    proc.appendChild(add_num_array(ulfd,'ingot_size',ds.processing.ingot_size));
+    proc.appendChild(add_processing(ulfd,'surface_treatment_sequence',ds.processing.surf_para,ds.processing.surf_seq));
     ulfd.appendChild(proc);
     
-    test=dn.createElement('testing');
-    test.appendChild(add_string(dn,'fatigue_type',ds.testing.fat_type));
-    test.appendChild(add_num_array(dn,'fatigue_temperature',ds.testing.fat_temp));
-    test.appendChild(add_num_array(dn,'load_ratio',ds.testing.fat_r));
-    test.appendChild(add_num_array(dn,'frequency',ds.testing.frequency));
-    test.appendChild(add_string(dn,'fatigue_standard',ds.testing.fat_standard));
-    test.appendChild(add_string(dn,'fatigue_environment',ds.testing.fat_env));
-    test.appendChild(add_string(dn,'fatigue_machine',ds.testing.fat_machine));
-    test.appendChild(add_string(dn,'specimen_description',ds.testing.spec_desc));
-    test.appendChild(add_num_array(dn,'specimen_size',ds.testing.spec_size));
-    test.appendChild(add_num_array(dn,'specimen_kt',ds.testing.spec_kt));
-    test.appendChild(add_string(dn,'load_control',ds.testing.load_ctrl));
-    test.appendChild(add_string(dn,'failure_criterion',ds.testing.fail_crt));
+    test=ulfd.createElement('testing');
+    test.appendChild(add_string(ulfd,'fatigue_type',ds.testing.fat_type));
+    test.appendChild(add_num_array(ulfd,'fatigue_temperature',ds.testing.fat_temp));
+    test.appendChild(add_num_array(ulfd,'load_ratio',ds.testing.fat_r));
+    test.appendChild(add_num_array(ulfd,'frequency',ds.testing.frequency));
+    test.appendChild(add_string(ulfd,'fatigue_standard',ds.testing.fat_standard));
+    test.appendChild(add_string(ulfd,'fatigue_environment',ds.testing.fat_env));
+    test.appendChild(add_string(ulfd,'fatigue_machine',ds.testing.fat_machine));
+    test.appendChild(add_string(ulfd,'specimen_description',ds.testing.spec_desc));
+    test.appendChild(add_num_array(ulfd,'specimen_size',ds.testing.spec_size));
+    test.appendChild(add_num_array(ulfd,'specimen_kt',ds.testing.spec_kt));
+    test.appendChild(add_string(ulfd,'load_control',ds.testing.load_ctrl));
+    test.appendChild(add_string(ulfd,'failure_criterion',ds.testing.fail_crt));
     ulfd.appendChild(test);
  
-    fati=dn.createElement('fatigue');
-    fati.appendChild(add_string(dn,'fatigue_data_type',ds.fatigue.fdata_type));
-    fati.appendChild(add_fatigue_data(dn,'fatigue_data',ds.fatigue.fat_data,ds.fatigue.fdata_type));
+    fati=ulfd.createElement('fatigue');
+    fati.appendChild(add_string(ulfd,'fatigue_data_type',ds.fatigue.fdata_type));
+    fati.appendChild(add_fatigue_data(ulfd,'fatigue_data',ds.fatigue.fat_data,ds.fatigue.fdata_type));
     ulfd.appendChild(fati);
     
-    mech=dn.createElement('mechanical_properties');
-    mech.appendChild(add_num_array(dn,'modulus',ds.mech_prop.modulus));
-    mech.appendChild(add_num_array(dn,'yield_strength',ds.mech_prop.yield_strength));
-    mech.appendChild(add_num_array(dn,'ultimate_strength',ds.mech_prop.ultimate_strength));
-    mech.appendChild(add_num_array(dn,'elongation',ds.mech_prop.elongation));
-    mech.appendChild(add_num_array(dn,'fracture_toughness',ds.mech_prop.toughness));
-    mech.appendChild(add_num_array(dn,'fatigue_crack_growth_rate',ds.mech_prop.kth));
+    mech=ulfd.createElement('mechanical_properties');
+    mech.appendChild(add_num_array(ulfd,'modulus',ds.mech_prop.modulus));
+    mech.appendChild(add_num_array(ulfd,'yield_strength',ds.mech_prop.yield_strength));
+    mech.appendChild(add_num_array(ulfd,'ultimate_strength',ds.mech_prop.ultimate_strength));
+    mech.appendChild(add_num_array(ulfd,'elongation',ds.mech_prop.elongation));
+    mech.appendChild(add_num_array(ulfd,'fracture_toughness',ds.mech_prop.toughness));
+    mech.appendChild(add_num_array(ulfd,'fatigue_crack_growth_rate',ds.mech_prop.kth));
     ulfd.appendChild(mech);    
 end
 

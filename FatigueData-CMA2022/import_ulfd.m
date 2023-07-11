@@ -1,9 +1,9 @@
 clear
 path='YOUR_PATH';
 file='ulfd.xml';
-data=importULFD(path,file);
+article=importULFD(path,file);
 
-function data=importULFD(path,file)
+function article=importULFD(path,file)
     xdoc=xmlread([path,file]);
     xroot=xdoc.getDocumentElement;
 
