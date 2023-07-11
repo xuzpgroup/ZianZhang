@@ -30,7 +30,7 @@ function article=importULFD(path,file)
     mat=xroot.getElementsByTagName('materials').item(0);
     ds.materials.mat_type=extract_string(mat,'type');
     ds.materials.mat_name=extract_string(mat,'name');
-    ds.materials.percent_type=extract_string(mat,'percent_type');
+    ds.materials.ratio_type=extract_string(mat,'ratio_type');
     ds.materials.atomic_struct=extract_string(mat,'atomic_structure');
     ds.materials.composition=extract_composition(mat,'composition');
 
@@ -208,7 +208,7 @@ function data=data_init()
     ds.fatigue.extract_method='';
     ds.materials.mat_type='';
     ds.materials.mat_name='';
-    ds.materials.percent_type='';
+    ds.materials.ratio_type='';
     ds.materials.atomic_struct='';
     ds.materials.mat_name2='';
     %ds.materials.trade_name='';

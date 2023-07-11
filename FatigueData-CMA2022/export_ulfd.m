@@ -30,7 +30,7 @@ function ulfd=exportULFD(meta,ds)
     mat=ulfd.createElement('materials');
     mat.appendChild(add_string(ulfd,'type',ds.materials.mat_type));
     mat.appendChild(add_string(ulfd,'name',ds.materials.mat_name));
-    mat.appendChild(add_string(ulfd,'percent_type',ds.materials.percent_type));
+    mat.appendChild(add_string(ulfd,'ratio_type',ds.materials.ratio_type));
     mat.appendChild(add_string(ulfd,'atomic_structure',ds.materials.atomic_struct));
     mat.appendChild(add_composition(ulfd,'composition',ds.materials.composition));
     ulfd.appendChild(mat);
