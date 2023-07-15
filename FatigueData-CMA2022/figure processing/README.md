@@ -22,7 +22,7 @@ where *rgb* is the matrix of the figures. *core_box*, *extend_box* are *n*\times
 The rule-based algorithm inherits from [IMEX](https://github.com/xuzpgroup/ZianZhang/tree/main/FatigueData-AM2022/IMEX). The large figure objects are determined based on *thre_panel*. And then, the axis, axis label, tick labels, and titles are searched among the surrounding figure objects.
 
 <br>
-<img src="./segment_result.jpg" width = "600" alt="figseg" align=left/>
+<img src="./segment_result.jpg" width = "800" alt="figseg" align=left/>
 <br>
 Fig. 1 The example result of figure segmentation. The red boxes contain the core part of each panel and the blue boxes contain the extended part of each panel.
 
