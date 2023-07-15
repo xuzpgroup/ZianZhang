@@ -21,9 +21,7 @@ function [extend_box,core_box]=process_figure(rgb,thre_bw,thre_panel,thre_axis)
 where *rgb* is the matrix of the figures. *core_box*, *extend_box* are *n*\times4 arrays, and each row is the leftmost, rightmost, uppermost, and lowermost pixels of the core part and extended part of a segmented figure, respectively.
 The rule-based algorithm inherits from [IMEX](https://github.com/xuzpgroup/ZianZhang/tree/main/FatigueData-AM2022/IMEX). The large figure objects are determined based on *thre_panel*. And then, the axis, axis label, tick labels, and titles are searched among the surrounding figure objects.
 
-<br>
 <img src="./segment_result.jpg" width = "800" alt="figseg" align=left/>
-<br>
 Fig. 1 The example result of figure segmentation. The red boxes contain the core part of each panel and the blue boxes contain the extended part of each panel.
 
 
