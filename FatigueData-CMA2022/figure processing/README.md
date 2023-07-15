@@ -2,19 +2,13 @@
 
 Figure segmentation is conducted by a MATLAB script (`figure_segment.m`) with rule-based algorithms.
 
-The input of the script includes
-
-  *figpath*: the path of the figure
-
-  *figname*: the name of the figure
-
-  *outpath*: the path for storing segmented figures
-
-  *thre_bw*: the threshold to transform grayscale figures to black-and-white figures.
-
-  *thre_panel*: the threshold of relative size to regard the figure object as a figure panel.
-
-  *thre_axis*: the threshold of length to detect the axis.
+The input of the script includes<br>
+&ensp;&ensp;&ensp;&ensp;*figpath*: the path of the figure.<br>
+&ensp;&ensp;&ensp;&ensp;*figname*: the name of the figure.<br>
+&ensp;&ensp;&ensp;&ensp;*outpath*: the path for storing segmented figures.<br>
+&ensp;&ensp;&ensp;&ensp;*thre_bw*: the threshold to transform grayscale figures to black-and-white figures.<br>
+&ensp;&ensp;&ensp;&ensp;*thre_panel*: the threshold of relative size to regard the figure object as a figure panel.<br>
+&ensp;&ensp;&ensp;&ensp;*thre_axis*: the threshold of length to detect the axis.<br>
 
 The output is segmented figures, both the core and the extended parts. The core part of the figure is the largest separated figure object in the panel (Fig. 1, red box). The core part is used for figure classification. The extended part includes potential figure titles, axis labels, and axis tick labels(Fig. 1, blue box). The extended part is used for subsequent figure data extraction.
 
